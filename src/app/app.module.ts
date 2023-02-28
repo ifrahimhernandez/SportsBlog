@@ -14,10 +14,6 @@ import { AppConfigState } from './store/app-config/app-config.state';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 
-// import mockServer from './mock-data/app.mock';
-
-// mockServer();
-
 @NgModule({
     declarations: [
         AppComponent
