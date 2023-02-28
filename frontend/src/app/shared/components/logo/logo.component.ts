@@ -34,7 +34,7 @@ export class LogoComponent implements OnInit {
         if(this.white) {
             chain.push('white')
         }
-        let logoUrl = `${urlPrefix}${chain.join('-')}.png`
+        let logoUrl = `${urlPrefix}${chain.join('-')}.svg`
         return logoUrl
     }    
 }
