@@ -1,5 +1,7 @@
+import { environment } from './../../environments/environment';
 import { AppConfig } from '@app/shared/types/app-config.interface';
 import { defaultLanguge } from './i18n.config'
+
 
 export const AppConfiguration: AppConfig = {
     layoutType: 'horizontal',
@@ -11,4 +13,4 @@ export const AppConfiguration: AppConfig = {
 }
 
 // Change your API endpoint here
-export const API_ENDPOINT = '/api'
+export const API_ENDPOINT = environment.api_url + '/api';

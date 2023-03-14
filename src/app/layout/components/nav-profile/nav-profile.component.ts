@@ -28,7 +28,7 @@ export class NavProfileComponent implements OnInit {
             item: 'Support'
         },
         {
-            path: '',
+            path: 'logout',
             icon: 'feather icon-power',
             item: 'Sign Out'
         }

@@ -3,12 +3,12 @@ import { NavMenu } from '@app/shared/types/nav-menu.interface';
 const dashboard: NavMenu[] = [
     {
         path: '/dashboard',
-        title: 'Dashboard',
-        translateKey: 'NAV.DASHBOARD',
+        title: 'Home',
+        translateKey: 'HOME',
         type: 'item',
         iconType: 'feather',
         icon: 'icon-home',
-        key: 'dashboard',
+        key: 'home',
         submenu: []
     },
 ]
@@ -99,7 +99,7 @@ const subMenuWithTitle: NavMenu[] = [
                 iconType: 'feather',
                 icon: 'icon-box',
                 key: 'submenu-with-title.menu',
-                submenu : [
+                submenu: [
                     {
                         path: '/ui-elements/accordion',
                         title: 'Submenu 1',

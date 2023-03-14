@@ -7,7 +7,7 @@ export const AUTH_LAYOUT_ROUTES: Routes = [
         pathMatch: 'full',
     },
     {
-        path: '',
+        path: 'auth',
         loadChildren: () => import('../views/auth/auth.module').then(m => m.AuthModule),
     },
     {
