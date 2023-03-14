@@ -1,7 +1,4 @@
-<div 
-    class="header-nav-wrap" 
-    [ngClass]="{'container': layoutType === 'horizontal'}"
->
+<div class="header-nav-wrap" [ngClass]="{'container': layoutType === 'horizontal'}">
     <ng-container *ngTemplateOutlet="layoutType === 'vertical' ? vertical : horizontal"></ng-container>
 </div>
 
@@ -15,13 +12,16 @@
 <ng-template #horizontal>
     <div class="header-nav-left">
         <nav-toggle *ngIf="isMobile" [isMobile]="isMobile"></nav-toggle>
-        <logo *ngIf="!isMobile" [white]= "logoColor !== 'dark'"></logo>
+        <logo *ngIf="!isMobile" [white]="logoColor !== 'dark'"></logo>
     </div>
     <ng-container *ngTemplateOutlet="headerNavRight"></ng-container>
 </ng-template>
 
 <ng-template #headerNavRight>
     <div class="header-nav-right">
+        <nav-notification></nav-notification>
         <nav-config></nav-config>
+        <nav-i18n></nav-i18n>
+        <nav-profile></nav-profile>
     </div>
 </ng-template>
