@@ -19,7 +19,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     submitted = false;
     error = '';
     private subs = new Subscription();
-    @Input() thirPartyLogin = true
+    @Input() thirdPartyLogin = true
 
 
     constructor(private formBuilder: FormBuilder,
