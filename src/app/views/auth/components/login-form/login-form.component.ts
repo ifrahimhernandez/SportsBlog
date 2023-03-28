@@ -1,9 +1,8 @@
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from './../../../../shared/services/authentication.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { first } from 'rxjs/operators';
+import { LogIn } from '@app/store/user/user.action';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'login-form',
@@ -23,9 +22,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
 
     constructor(private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private authenticationService: AuthenticationService) { }
+        private store: Store) { }
 
     ngOnInit() {
         this.formGroup = this.formBuilder.group({
@@ -52,24 +49,10 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         // stop here if form is invalid
         if (this.formGroup.invalid) return;
 
-        this.loading = true;
-        this.subs.add(this.authenticationService.login(this.f.username.value, this.f.password.value)
-            .pipe(first())
-            .subscribe({
-                next: (data) => {
-                    if (data.type === 'error') {
-                        this.loading = false;
-                        this.showResult = true;
-                    } else {
-                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-                        this.router.navigateByUrl(returnUrl);
-                    }
-                },
-                error: error => {
-                    this.error = error;
-                    this.loading = false;
-                }
-            }));
+        this.store.dispatch(LogIn({
+            username: this.f.username.value,
+            password: this.f.password.value
+        }));
     }
 
     onShowPasswordClick() {

@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, HostListener } from '@angular/core';
-import { Select } from '@ngxs/store'; 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { AppConfig, NavMenuColor } from '@app/shared/types/app-config.interface';
 import { ScreenSizeService } from '@app/shared/services/screen-size.service';
 import { delay } from 'rxjs/operators';
 import { SCREEN_SIZE } from '@app/shared/types/screen-size.enum';
+import { getAppConfig } from '@app/store/app-config/app-config.selector';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'vertical-layout',
@@ -13,10 +14,9 @@ import { SCREEN_SIZE } from '@app/shared/types/screen-size.enum';
     host: {
         '[class.vertical-layout]': 'true'
     },
-    providers:[ScreenSizeService]
+    providers: [ScreenSizeService]
 })
 export class VerticalLayoutComponent implements OnInit {
-    @Select((state: { app: AppConfig; }) => state.app) app$: Observable<AppConfig>;
 
     isCollapse: boolean;
     isMobile: boolean;
@@ -24,12 +24,13 @@ export class VerticalLayoutComponent implements OnInit {
     quickExpand: boolean;
     navMenuColor: NavMenuColor;
     headerNavColor: string;
-    subscription: Subscription
-    
-    constructor(private cdr: ChangeDetectorRef, private screenSizeSvc: ScreenSizeService) {
+    subscription: Subscription;
+    private app$: Observable<AppConfig> = this.store.select(getAppConfig);
+
+    constructor(private cdr: ChangeDetectorRef, private screenSizeSvc: ScreenSizeService, private store: Store) {
         this.screenSizeSvc.onResize$.pipe(delay(0)).subscribe(sizes => {
-            const sizeTabletAbove = sizes.includes(SCREEN_SIZE.XXL) ||  sizes.includes(SCREEN_SIZE.XL) || sizes.includes(SCREEN_SIZE.LG)
-            if(sizeTabletAbove){
+            const sizeTabletAbove = sizes.includes(SCREEN_SIZE.XXL) || sizes.includes(SCREEN_SIZE.XL) || sizes.includes(SCREEN_SIZE.LG)
+            if (sizeTabletAbove) {
                 this.isMobile = false
             } else {
                 this.isMobile = true
@@ -38,7 +39,7 @@ export class VerticalLayoutComponent implements OnInit {
         });
     }
 
-    @HostListener('window:resize', ['$event'])windowResize(event) {
+    @HostListener('window:resize', ['$event']) windowResize(event) {
         this.getScreenWidth(event.target.innerWidth)
     }
 
@@ -54,22 +55,22 @@ export class VerticalLayoutComponent implements OnInit {
     }
 
     mouseEnterExpand() {
-        if(this.isCollapse) {
+        if (this.isCollapse) {
             this.quickExpand = true
         }
     }
 
     mouseLeaveCollapse() {
-        if(this.isCollapse) {
+        if (this.isCollapse) {
             this.quickExpand = false
         }
     }
 
-    getScreenWidth(size:number) {
+    getScreenWidth(size: number) {
         this.screenSizeSvc.onResize(size)
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.subscription.unsubscribe()
     }
 }

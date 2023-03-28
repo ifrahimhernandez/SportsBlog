@@ -1,10 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { AppConfig } from '@app/shared/types/app-config.interface';
 import { Observable } from 'rxjs';
-import { UpdateCurrentLanguage } from '@app/store/app-config/app-config.action'
-import { supportedLanguages } from  '@app/configs/i18n.config';
+import { UpdateCurrentLanguage } from '@app/store/app-config/app-config.action';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { AppConfig } from '@app/shared/types/app-config.interface';
+import { supportedLanguages } from '@app/configs/i18n.config';
 import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
+import { getAppConfig } from '@app/store/app-config/app-config.selector';
 
 @Component({
     selector: 'nav-i18n',
@@ -15,12 +16,11 @@ import { TranslateService } from '@ngx-translate/core';
     }
 })
 export class NavI18NComponent implements OnInit {
-    @Select((state: { app: AppConfig; }) => state.app) app$: Observable<AppConfig>;
     currentLang: string;
     languageList = []
+    private app$: Observable<AppConfig> = this.store.select(getAppConfig);
 
-    constructor(private store: Store, private translateService: TranslateService, ) {
-    }
+    constructor(private store: Store, private translateService: TranslateService) { }
 
     ngOnInit(): void {
         this.getLanguageList()
@@ -44,7 +44,7 @@ export class NavI18NComponent implements OnInit {
     }
 
     setLanguage(language: string) {
-        this.store.dispatch(new UpdateCurrentLanguage(language));
+        this.store.dispatch(UpdateCurrentLanguage({ lang: language }));
         this.translateService.use(language);
     }
 }

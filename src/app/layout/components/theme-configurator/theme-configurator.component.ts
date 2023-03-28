@@ -1,8 +1,9 @@
+import { UpdateConfig } from '../../../store/app-config/app-config.action';
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store'; 
 import { Observable, Subscription } from 'rxjs';
 import { AppConfig } from '@app/shared/types/app-config.interface';
-import { UpdateConfig } from '@app/store/app-config/app-config.action';
+import { Store } from '@ngrx/store';
+import { getAppConfig } from '@app/store/app-config/app-config.selector';
 
 @Component({
     selector: 'theme-configurator',
@@ -10,12 +11,12 @@ import { UpdateConfig } from '@app/store/app-config/app-config.action';
 })
 
 export class ThemeConfiguratorComponent implements OnInit {
-    @Select((state: { app: AppConfig; }) => state.app) app$: Observable<AppConfig>;
 
     config: AppConfig
     subscription: Subscription
     headerNavColors: string[] = ['#ffffff', '#11a1fd', '#00c569', '#5a75f9', '#ffc833', '#f46363']
-    
+    private app$: Observable<AppConfig> = this.store.select(getAppConfig);
+
     constructor(private store: Store) { }
 
     ngOnInit() {
@@ -26,7 +27,7 @@ export class ThemeConfiguratorComponent implements OnInit {
 
     configChange() {
         console.log('configChange', this.config);
-        this.store.dispatch(new UpdateConfig(this.config));      
+        this.store.dispatch(UpdateConfig(this.config));
     }
 
     onColorChange(color: string) {
@@ -34,7 +35,7 @@ export class ThemeConfiguratorComponent implements OnInit {
         this.configChange()
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.subscription.unsubscribe()
     }
 }

@@ -1,17 +1,18 @@
+import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { AuthenticationService } from '../services/authentication.service';
+import { LogOut } from '@app/store/user/user.action';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogoutGuard implements CanActivate {
   constructor(
-    private auth: AuthenticationService,
-    private router: Router) { }
+    private router: Router,
+    private store: Store) { }
 
   canActivate(): UrlTree {
-    this.auth.logout();
+    this.store.dispatch(LogOut());
     return this.router.createUrlTree(['auth', 'login']);
   }
 

@@ -1,11 +1,12 @@
+import { AppConfig } from './shared/types/app-config.interface';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { Select } from '@ngxs/store';
-import { AppConfig } from '@app/shared/types/app-config.interface';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import en_US from './i18n/lang_en.json'
 import fr_FR from './i18n/lang_fr.json';
 import es_ES from './i18n/lang_es.json';
+import { getAppConfig } from './store/app-config/app-config.selector';
+import { Store } from '@ngrx/store';
 
 const storageKey = 'lang'
 
@@ -14,11 +15,13 @@ const storageKey = 'lang'
     templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
-    @Select((state: { app: AppConfig; }) => state.app) app$: Observable<AppConfig>;
     private langChangeSubscription!: Subscription;
+    private app$: Observable<AppConfig> = this.store.select(getAppConfig);
     currentLang: string;
+    subscription: Subscription;
 
-    constructor(private translateService: TranslateService) {
+    constructor(private translateService: TranslateService,
+        private store: Store) {
         translateService.setTranslation('en_US', en_US);
         translateService.setTranslation('fr_FR', fr_FR);
         translateService.setTranslation('es_ES', es_ES);
@@ -35,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.subscription.unsubscribe()
         if (this.langChangeSubscription) {
             this.langChangeSubscription.unsubscribe();
         }

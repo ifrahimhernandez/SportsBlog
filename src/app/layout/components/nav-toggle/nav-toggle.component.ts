@@ -1,5 +1,6 @@
+import { getAppConfig } from './../../../store/app-config/app-config.selector';
 import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
-import { Store, Select } from '@ngxs/store'; 
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppConfig } from '@app/shared/types/app-config.interface';
 import { UpdateSideNavCollapse, UpdateMobileNavCollapse } from '@app/store/app-config/app-config.action'
@@ -13,14 +14,12 @@ import { UpdateSideNavCollapse, UpdateMobileNavCollapse } from '@app/store/app-c
     }
 })
 export class NavToggleComponent implements OnInit {
-    @Select((state: { app: AppConfig; }) => state.app) app$: Observable<AppConfig>;
-
+    private app$: Observable<AppConfig> = this.store.select(getAppConfig);
     private isCollapse: boolean
     private isMobileCollapse: boolean
     @Input() isMobile: boolean
 
-    constructor(private store: Store, private cdr: ChangeDetectorRef) {
-    }
+    constructor(private store: Store, private cdr: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.app$.subscribe(app => {
@@ -29,18 +28,18 @@ export class NavToggleComponent implements OnInit {
             this.cdr.markForCheck()
         });
     }
-    
+
     updateSideNavCollapse() {
-        this.store.dispatch(new UpdateSideNavCollapse(this.isCollapse));
+        this.store.dispatch(UpdateSideNavCollapse({ sideNavCollapse: this.isCollapse }));
     }
 
     toggleNavCollapse() {
-        if(!this.isMobile) {
+        if (!this.isMobile) {
             this.isCollapse = !this.isCollapse;
-            this.store.dispatch(new UpdateSideNavCollapse(this.isCollapse));
+            this.store.dispatch(UpdateSideNavCollapse({ sideNavCollapse: this.isCollapse }));
         } else {
             this.isMobileCollapse = !this.isMobileCollapse
-            this.store.dispatch(new UpdateMobileNavCollapse(this.isMobileCollapse));
+            this.store.dispatch(UpdateMobileNavCollapse({ mobileNavCollapse: this.isMobileCollapse }));
         }
     }
 }

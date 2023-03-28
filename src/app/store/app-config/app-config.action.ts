@@ -1,25 +1,22 @@
+import { createAction, props } from '@ngrx/store';
 import { AppConfig } from '@app/shared/types/app-config.interface';
 
-export class UpdateConfig {
-    static readonly type = '[AppConfig] Update Config';
+export const UpdateConfig = createAction(
+    '[AppConfig] Update Config',
+    props<AppConfig>()
+);
 
-    constructor(public payload: AppConfig) {}
-}
+export const UpdateSideNavCollapse = createAction(
+    '[AppConfig] Update Side Nav Collapse',
+    props<{ sideNavCollapse: boolean }>()
+);
 
-export class UpdateSideNavCollapse {
-    static readonly type = '[AppConfig] Update Side Nav Collapse';
-    
-    constructor(public sideNavCollapse: boolean) {}
-}
+export const UpdateMobileNavCollapse = createAction(
+    '[AppConfig] Update Mobile Nav Collapse',
+    props<{ mobileNavCollapse: boolean }>()
+);
 
-export class UpdateMobileNavCollapse {
-    static readonly type = '[AppConfig] Update Mobile Nav Collapse';
-    
-    constructor(public mobileNavCollapse: boolean) {}
-}
-
-export class UpdateCurrentLanguage {
-    static readonly type = '[AppConfig] Update Current Language';
-    
-    constructor(public lang: string) {}
-}
+export const UpdateCurrentLanguage = createAction(
+    '[AppConfig] Update Current Language',
+    props<{ lang: string }>()
+);

@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Select } from '@ngxs/store';
 import { AppConfig, LayoutType } from '@app/shared/types/app-config.interface';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { getAppConfig } from '@app/store/app-config/app-config.selector';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'app-layout',
@@ -13,12 +14,13 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class AppLayoutComponent implements OnInit {
 
-    @Select((state: { app: AppConfig; }) => state.app) app$: Observable<AppConfig>;
-    
     layout: LayoutType;
     subscription: Subscription;
+    private app$: Observable<AppConfig> = this.store.select(getAppConfig);
 
-    constructor(private cdr: ChangeDetectorRef) {
+    constructor(
+        private cdr: ChangeDetectorRef,
+        private store: Store) {
     }
 
     ngOnInit() {
@@ -28,7 +30,7 @@ export class AppLayoutComponent implements OnInit {
         });
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.subscription.unsubscribe()
     }
 }
