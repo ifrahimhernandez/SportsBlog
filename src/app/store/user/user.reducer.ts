@@ -1,7 +1,7 @@
 
 import { User } from '@app/shared/types/user.interface';
 import { Action, createReducer, on } from '@ngrx/store';
-import { LogIn, LogInFailed, LogInSuccess, LogOut } from './user.action';
+import { LogInFailed, LogInSuccess, LogOut } from './user.action';
 
 export interface userState {
     isLoggedIn: boolean;

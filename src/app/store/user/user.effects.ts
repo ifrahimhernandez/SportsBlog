@@ -23,12 +23,10 @@ export class UserEffects {
             ofType(LogIn),
             switchMap((payload: AuthStateModel) => this.AuthService.login(payload.username, payload.password).pipe(
                 map((user: User) => {
-                    console.log("map")
                     this.AuthService.setUserLocalStorage(user);
                     return LogInSuccess({ user: user });
                 }),
                 tap(() => {
-                    console.log("tap")
                     this.router.navigateByUrl(this.route.snapshot.queryParams['returnUrl'] || '/dashboard');
                 }),
                 catchError((e): any => {
